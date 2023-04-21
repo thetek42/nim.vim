@@ -56,10 +56,12 @@ syn keyword nimKeyword       xor
 syn keyword nimKeyword       yield
 
 syn match   nimFunction      "[a-zA-Z_][a-zA-Z0-9_]*" contained
-syn match   nimClass         "[a-zA-Z_][a-zA-Z0-9_]*" contained
+syn match   nimClass         "\v<[A-Z_][a-zA-Z0-9_]*>"
 syn keyword nimRepeat        for while
 syn keyword nimConditional   if elif else case of
-syn keyword nimOperator      and in is not or xor shl shr div
+syn match   nimDelimiter     "[(\[{}\]).:,;]"
+"syn keyword nimOperator      and in is not or xor shl shr div
+syn match   nimOperator      "[=+\-*/<>@$~&%|!?^\\]\|\.\."
 syn match   nimComment       "#.*$" contains=nimTodo,@Spell
 syn region  nimComment       start="#\[" end="\]#" contains=nimTodo,@Spell
 syn keyword nimTodo          TODO FIXME XXX contained
@@ -96,11 +98,11 @@ endif
 
 if nim_highlight_builtins == 1
   " builtin functions, types and objects, not really part of the syntax
-  syn keyword nimBuiltin int int8 int16 int32 int64 uint uint8 uint16 uint32 uint64 float float32 float64
-  syn keyword nimBuiltin bool void chr char string cstring pointer range array openarray openArray seq varargs varArgs
-  syn keyword nimBuiltin set Byte Natural Positive Conversion
-  syn keyword nimBuiltin BiggestInt BiggestFloat cchar cschar cshort cint csize cuchar cushort
-  syn keyword nimBuiltin clong clonglong cfloat cdouble clongdouble cuint culong culonglong cchar
+  syn keyword nimBuiltinType int int8 int16 int32 int64 uint uint8 uint16 uint32 uint64 float float32 float64
+  syn keyword nimBuiltinType bool void chr char string cstring pointer range array openarray openArray seq varargs varArgs
+  syn keyword nimBuiltinType set Byte Natural Positive Conversion
+  syn keyword nimBuiltinType BiggestInt BiggestFloat cchar cschar cshort cint csize cuchar cushort
+  syn keyword nimBuiltinType clong clonglong cfloat cdouble clongdouble cuint culong culonglong cchar
   syn keyword nimBuiltin CompileDate CompileTime nimversion nimVersion nimmajor nimMajor
   syn keyword nimBuiltin nimminor nimMinor nimpatch nimPatch cpuendian cpuEndian hostos hostOS hostcpu hostCPU inf
   syn keyword nimBuiltin neginf nan QuitSuccess QuitFailure dbglinehook dbgLineHook stdin
@@ -176,11 +178,13 @@ if v:version >= 508 || !exists('did_nim_syn_inits')
   HiLink nimBoolean        Boolean
   HiLink nimEscape		      Special
   HiLink nimOperator		    Operator
+  HiLink nimDelimiter		    @punctuation.delimiter
   HiLink nimPreCondit	    PreCondit
   HiLink nimComment		    Comment
   HiLink nimTodo		        Todo
   HiLink nimDecorator	    Define
   HiLink nimSpecialVar	    Identifier
+  HiLink nimClass Type
   
   if nim_highlight_numbers == 1
     HiLink nimNumber	Number
@@ -188,6 +192,7 @@ if v:version >= 508 || !exists('did_nim_syn_inits')
   
   if nim_highlight_builtins == 1
     HiLink nimBuiltin	Number
+    HiLink nimBuiltinType	Type
   endif
   
   if nim_highlight_exceptions == 1
